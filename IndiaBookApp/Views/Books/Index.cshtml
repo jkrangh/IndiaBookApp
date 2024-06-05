@@ -49,13 +49,13 @@
                 @Html.DisplayFor(modelItem => item.Country)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageLink)
+                <img src="@Html.DisplayFor(modelItem => item.ImageLink)"/>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Language)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Link)
+                <a href="@Html.DisplayFor(modelItem => item.Link)">@item.Link</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Pages)
