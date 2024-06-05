@@ -4,12 +4,13 @@ using IndiaBookApp.Models;
 
 namespace IndiaBookApp.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-        public DbSet<IndiaBookApp.Models.Book> Books { get; set; } = default!;
+        public DbSet<User> Users { get; set; }
+        public DbSet<Book> Books { get; set; } = default!;
     }
 }
