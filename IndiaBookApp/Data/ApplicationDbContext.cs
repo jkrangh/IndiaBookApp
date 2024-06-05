@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using IndiaBookApp.Models;
 
 namespace IndiaBookApp.Data
 {
@@ -9,5 +10,6 @@ namespace IndiaBookApp.Data
             : base(options)
         {
         }
+        public DbSet<IndiaBookApp.Models.Book> Books { get; set; } = default!;
     }
 }
