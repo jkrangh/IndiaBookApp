@@ -12,22 +12,23 @@ namespace IndiaBookApp.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
+        //public DbSet<User> Users { get; set; }
         public DbSet<Book> Books { get; set; } = default!;
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public void SeedDatabase()
         {
-            modelBuilder.Entity<Book>().HasData(SeedBookData());
+            if (!Books.Any())
+            {
+                var books = GetBooksFromJson();
+                Books.AddRange(books);
+                SaveChanges();
+            }
         }
 
-        public List<Book> SeedBookData()
+        private List<Book> GetBooksFromJson()
         {
-            var books = new List<Book>();
-            using (StreamReader r = new StreamReader(@"wwwroot/seed-data/books.json"))
-            {
-                string json = r.ReadToEnd();
-                books = JsonConvert.DeserializeObject<List<Book>>(json);
-            }
+            var jsonData = File.ReadAllText(@"wwwroot/seed-data/books.json");
+            var books = JsonConvert.DeserializeObject<List<Book>>(jsonData);
             return books;
         }
     }

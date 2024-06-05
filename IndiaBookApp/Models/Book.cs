@@ -4,14 +4,14 @@
     public class Book
     {
         public int Id { get; set; }
-        public string author { get; set; }
-        public string country { get; set; }
-        public string imageLink { get; set; }
-        public string language { get; set; }
-        public string link { get; set; }
-        public int pages { get; set; }
-        public string title { get; set; }
-        public int year { get; set; }
+        public string Author { get; set; }
+        public string Country { get; set; }
+        public string ImageLink { get; set; }
+        public string Language { get; set; }
+        public string Link { get; set; }
+        public int Pages { get; set; }
+        public string Title { get; set; }
+        public int Year { get; set; }
     }
 
 }

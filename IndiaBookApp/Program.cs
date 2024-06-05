@@ -61,6 +61,7 @@ namespace IndiaBookApp
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+            DatabaseSeeder.SeedDatabase(app);
 
             app.Run();
         }
