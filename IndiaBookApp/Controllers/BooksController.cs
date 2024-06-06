@@ -54,7 +54,7 @@ namespace IndiaBookApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,author,country,imageLink,language,link,pages,title,year")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Author,Country,ImageLink,Language,Link,Pages,Title,Year")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace IndiaBookApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,author,country,imageLink,language,link,pages,title,year")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Author,Country,ImageLink,Language,Link,Pages,Title,Year")] Book book)
         {
             if (id != book.Id)
             {
