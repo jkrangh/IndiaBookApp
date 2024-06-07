@@ -1,4 +1,6 @@
 using IndiaBookApp.Data;
+using IndiaBookApp.Data.Interfaces;
+using IndiaBookApp.Data.Repositories;
 using IndiaBookApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -35,6 +37,8 @@ namespace IndiaBookApp
             .AddDefaultTokenProviders();
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IBook, BookRepository>();
 
             var app = builder.Build();
 

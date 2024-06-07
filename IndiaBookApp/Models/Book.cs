@@ -1,4 +1,6 @@
-﻿namespace IndiaBookApp.Models
+﻿using IndiaBookApp.Data.Interfaces;
+
+namespace IndiaBookApp.Models
 {
 
     public class Book
