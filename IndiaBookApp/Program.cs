@@ -22,6 +22,8 @@ namespace IndiaBookApp
 
             //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddTransient<IBook, BookRepository>();
+
 
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
@@ -37,8 +39,6 @@ namespace IndiaBookApp
             .AddDefaultTokenProviders();
 
             builder.Services.AddControllersWithViews();
-
-            builder.Services.AddScoped<IBook, BookRepository>();
 
             var app = builder.Build();
 

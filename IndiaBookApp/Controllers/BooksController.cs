@@ -9,14 +9,15 @@ using IndiaBookApp.Data;
 using IndiaBookApp.Models;
 using IndiaBookApp.Data.Repositories;
 using Microsoft.CodeAnalysis.Operations;
+using IndiaBookApp.Data.Interfaces;
 
 namespace IndiaBookApp.Controllers
 {
     public class BooksController : Controller
     {
-        private readonly BookRepository bookRepository;
+        private readonly IBook bookRepository;
 
-        public BooksController(BookRepository bookRepository)
+        public BooksController(IBook bookRepository)
         {
             this.bookRepository = bookRepository;
         }
@@ -59,7 +60,7 @@ namespace IndiaBookApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                bookRepository.AddAsync(book);
+                await bookRepository.AddAsync(book);
                 return RedirectToAction(nameof(Index));
             }
             return View(book);

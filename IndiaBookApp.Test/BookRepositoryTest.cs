@@ -38,15 +38,17 @@ namespace IndiaBookApp.Test
         {
             //Arrange
             var book = TestBook();
+            var book2 = TestBook();
             var result = new Book();
             //Act
             await bookRepository.AddAsync(book);
+            await bookRepository.AddAsync(book2);
             book.Country = "Spain";
             await bookRepository.UpdateAsync(book);
             var books = await bookRepository.GetAllAsync();
-            result = books.FirstOrDefault(x => x.Author == book.Author);
+            result = books.FirstOrDefault(x => x.Id == book.Id);
             //Assert
-            Assert.Equal(book, result);
+            Assert.Equal(book.Country, result.Country);
         }
         [Fact]
         public void DeleteBook()
