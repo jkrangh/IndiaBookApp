@@ -23,9 +23,23 @@ namespace IndiaBookApp.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await bookRepository.GetAllAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var books = await bookRepository.GetAllAsync();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(b =>
+                    b.Author.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                    b.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                    b.Country.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                    b.Language.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                    b.Year.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return View(books);
         }
 
         // GET: Books/Details/5

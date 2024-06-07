@@ -38,7 +38,7 @@ namespace IndiaBookApp.Data.Repositories
         public async Task UpdateAsync(Book book)
         {
             applicationDbContext.Update(book);
-            //await applicationDbContext.SaveChangesAsync();
+            await applicationDbContext.SaveChangesAsync();
         }
     }
 }
