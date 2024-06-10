@@ -12,7 +12,7 @@ namespace IndiaBookApp.Data
         {
         }
 
-        //public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Book> Books { get; set; } = default!;
 
         public void SeedDatabase()

@@ -33,23 +33,33 @@ namespace IndiaBookApp.Test
             //Assert
             Assert.Equal(book, result);
         }
+
         [Fact]
-        public async void UpdateBook()
+        public async Task UpdateBook()
         {
-            //Arrange
+            // Arrange
             var book = TestBook();
-            var book2 = TestBook();
-            var result = new Book();
-            //Act
             await bookRepository.AddAsync(book);
-            await bookRepository.AddAsync(book2);
+
+            // Act
             book.Country = "Spain";
-            await bookRepository.UpdateAsync(book);
-            var books = await bookRepository.GetAllAsync();
-            result = books.FirstOrDefault(x => x.Id == book.Id);
-            //Assert
-            Assert.Equal(book.Country, result.Country);
+
+            // Using a different context to ensure we're testing persistence
+            using (var dbContextUpdate = new ApplicationDbContext(dbContextOptions))
+            {
+                var bookRepoUpdate = new BookRepository(dbContextUpdate);
+                await bookRepoUpdate.UpdateAsync(book);
+            }
+
+            // Assert
+            using (var dbContextCheck = new ApplicationDbContext(dbContextOptions))
+            {
+                var bookRepoCheck = new BookRepository(dbContextCheck);
+                var updatedBook = await bookRepoCheck.GetByIdAsync(book.Id);
+                Assert.Equal("Spain", updatedBook.Country);
+            }
         }
+
         [Fact]
         public void DeleteBook()
         {
@@ -59,6 +69,7 @@ namespace IndiaBookApp.Test
 
             //Assert
         }
+
         [Fact]
         public void GetBooks()
         {
@@ -68,6 +79,7 @@ namespace IndiaBookApp.Test
 
             //Assert
         }
+
         [Fact]
         public void GetBookById()
         {
@@ -85,12 +97,13 @@ namespace IndiaBookApp.Test
                 Author = "Jeff",
                 Country = "England",
                 ImageLink = "EmptyImage",
-                Language = "Enlgish",
+                Language = "English",
                 Link = "EmptyWikiLink",
                 Pages = 404,
                 Title = "NoPageFound",
                 Year = 2024
             };
+            
             return book;
         }
 
@@ -98,6 +111,23 @@ namespace IndiaBookApp.Test
         {
             dbContext.Database.EnsureDeleted();
         }
+
+        [Fact]
+        public async Task SearchBooks()
+        {
+            // Arrange
+            var book = TestBook();
+            await bookRepository.AddAsync(book);
+
+            // Act
+            var searchString = "Jeff";
+            var result = await bookRepository.SearchAsync(searchString);
+
+            // Assert
+            Assert.Single(result);
+            Assert.Equal("NoPageFound", result.First().Title);
+        }
+
         //Arrange
 
         //Act

@@ -27,16 +27,15 @@ namespace IndiaBookApp.Controllers
         {
             ViewData["CurrentFilter"] = searchString;
 
-            var books = await bookRepository.GetAllAsync();
+            IEnumerable<Book> books;
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                books = books.Where(b =>
-                    b.Author.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    b.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    b.Country.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    b.Language.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    b.Year.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase));
+                books = await bookRepository.SearchAsync(searchString);
+            }
+            else
+            {
+                books = await bookRepository.GetAllAsync();
             }
 
             return View(books);
