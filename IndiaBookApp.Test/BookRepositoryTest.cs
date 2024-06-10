@@ -94,7 +94,7 @@ namespace IndiaBookApp.Test
             Assert.Equal(book.Id, result.Id);
         }
 
-        private Book TestBook()
+        public Book TestBook()
         {
             Book book = new Book()
             {

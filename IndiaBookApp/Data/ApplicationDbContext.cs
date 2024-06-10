@@ -14,6 +14,7 @@ namespace IndiaBookApp.Data
 
         //public DbSet<User> Users { get; set; }
         public DbSet<Book> Books { get; set; } = default!;
+        public DbSet<BookLoan> BookLoans { get; set; }
 
         public void SeedDatabase()
         {
@@ -31,5 +32,6 @@ namespace IndiaBookApp.Data
             var books = JsonConvert.DeserializeObject<List<Book>>(jsonData);
             return books;
         }
+        public DbSet<IndiaBookApp.Models.BookLoan> BookLoan { get; set; } = default!;
     }
 }
