@@ -42,18 +42,24 @@ namespace IndiaBookApp.Test
         {
             //Arrange
             var bookLoan = TestBookLoan();
-            var bookLoan2 = TestBookLoan();
-            var result = new BookLoan();
-            //Act
+            //var bookLoan2 = TestBookLoan();
+            //var result = new BookLoan();
             await bookLoanRepository.AddAsync(bookLoan);
-            await bookLoanRepository.AddAsync(bookLoan2);
+            //Act
+            //await bookLoanRepository.AddAsync(bookLoan2);
             bookLoan.LoanExpires = DateTime.Now.AddDays(30);
             await bookLoanRepository.UpdateAsync(bookLoan);
 
             var bookLoans = await bookLoanRepository.GetAllAsync();
-            result = bookLoans.Single(x => x.Id == bookLoan.Id);
+            //result = bookLoans.Single(x => x.Id == bookLoan.Id);
             //Assert
-            Assert.Equal(bookLoan.LoanExpires, result.LoanExpires);
+            using (var dbContextCheck = new ApplicationDbContext(dbContextOptions))
+            {
+                var bookLoanRepositoryCheck = new BookLoanRepository(dbContextCheck);
+                var updatedLoan = await bookLoanRepositoryCheck.GetByIdAsync(bookLoan.Id);
+                Assert.Equal(bookLoan.LoanExpires, updatedLoan.LoanExpires);
+            }
+            
         }
         [Fact]
         public async void DeleteBookLoan()

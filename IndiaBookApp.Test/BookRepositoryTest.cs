@@ -43,15 +43,10 @@ namespace IndiaBookApp.Test
             await bookRepository.AddAsync(book);
 
             // Act
-            book.Country = "Spain";
+            book.Country = "Spain";            
+            await bookRepository.UpdateAsync(book);
 
             // Using a different context to ensure we're testing persistence
-            using (var dbContextUpdate = new ApplicationDbContext(dbContextOptions))
-            {
-                var bookRepoUpdate = new BookRepository(dbContextUpdate);
-                await bookRepoUpdate.UpdateAsync(book);
-            }
-
             // Assert
             using (var dbContextCheck = new ApplicationDbContext(dbContextOptions))
             {
