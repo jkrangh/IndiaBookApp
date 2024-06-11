@@ -7,42 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IndiaBookApp.Data;
 using IndiaBookApp.Models;
-using IndiaBookApp.Data.Repositories;
-using Microsoft.CodeAnalysis.Operations;
 using IndiaBookApp.Data.Interfaces;
 
 namespace IndiaBookApp.Controllers
 {
-    public class BooksController : Controller
+    public class BookLoansController : Controller
     {
-        private readonly IBook bookRepository;
+        private readonly IBookLoan bookLoanRepository;
 
-        public BooksController(IBook bookRepository)
+        public BookLoansController(IBookLoan bookLoanRepository)
         {
-            this.bookRepository = bookRepository;
+            
+            this.bookLoanRepository = bookLoanRepository;
         }
 
-        // GET: Books
-        public async Task<IActionResult> Index(string searchString)
+        // GET: BookLoans
+        public async Task<IActionResult> Index()
         {
-            ViewData["CurrentFilter"] = searchString;
-
-            var books = await bookRepository.GetAllAsync();
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                books = books.Where(b =>
-                    b.Author.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    b.Title.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    b.Country.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    b.Language.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
-                    b.Year.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase));
-            }
-
-            return View(books);
+            return View(await bookLoanRepository.GetAllAsync());
         }
 
-        // GET: Books/Details/5
+        // GET: BookLoans/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -50,37 +35,37 @@ namespace IndiaBookApp.Controllers
                 return NotFound();
             }
 
-            var book = await bookRepository.GetByIdAsync(id);
-            if (book == null)
+            var bookLoan = await bookLoanRepository.GetByIdAsync(id);
+            if (bookLoan == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(bookLoan);
         }
 
-        // GET: Books/Create
+        // GET: BookLoans/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Books/Create
+        // POST: BookLoans/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Author,Country,ImageLink,Language,Link,Pages,Title,Year")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,LoanDate,LoanExpires")] BookLoan bookLoan)
         {
             if (ModelState.IsValid)
             {
-                await bookRepository.AddAsync(book);
+                bookLoanRepository.AddAsync(bookLoan);
                 return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            return View(bookLoan);
         }
 
-        // GET: Books/Edit/5
+        // GET: BookLoans/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,22 +73,22 @@ namespace IndiaBookApp.Controllers
                 return NotFound();
             }
 
-            var book = await bookRepository.GetByIdAsync(id);
-            if (book == null)
+            var bookLoan = await bookLoanRepository.GetByIdAsync(id);
+            if (bookLoan == null)
             {
                 return NotFound();
             }
-            return View(book);
+            return View(bookLoan);
         }
 
-        // POST: Books/Edit/5
+        // POST: BookLoans/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Author,Country,ImageLink,Language,Link,Pages,Title,Year")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LoanDate,LoanExpires")] BookLoan bookLoan)
         {
-            if (id != book.Id)
+            if (id != bookLoan.Id)
             {
                 return NotFound();
             }
@@ -112,11 +97,11 @@ namespace IndiaBookApp.Controllers
             {
                 try
                 {
-                  await bookRepository.UpdateAsync(book);
+                    bookLoanRepository.UpdateAsync(bookLoan);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await BookExistsAsync(book.Id))
+                    if (!await BookLoanExistsAsync(bookLoan.Id))
                     {
                         return NotFound();
                     }
@@ -127,10 +112,10 @@ namespace IndiaBookApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            return View(bookLoan);
         }
 
-        // GET: Books/Delete/5
+        // GET: BookLoans/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,33 +123,31 @@ namespace IndiaBookApp.Controllers
                 return NotFound();
             }
 
-            var book = await bookRepository.GetByIdAsync(id);
-            if (book == null)
+            var bookLoan = await bookLoanRepository.GetByIdAsync(id);
+            if (bookLoan == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(bookLoan);
         }
 
-        // POST: Books/Delete/5
+        // POST: BookLoans/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await bookRepository.GetByIdAsync(id);
-            if (book != null)
+            var bookLoan = await bookLoanRepository.GetByIdAsync(id);
+            if (bookLoan != null)
             {
-                await bookRepository.DeleteAsync(book);
-            }            
+                await bookLoanRepository.DeleteAsync(bookLoan);
+            }
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> BookExistsAsync(int id)
+        private async Task<bool> BookLoanExistsAsync(int id)
         {
-            
-            
-            return Convert.ToBoolean(await bookRepository.GetByIdAsync(id));
+            return Convert.ToBoolean(await bookLoanRepository.GetByIdAsync(id));
         }
     }
 }
