@@ -27,16 +27,21 @@ namespace IndiaBookApp
 
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
-                //options.Password.RequireDigit = true;
-                //options.Password.RequiredLength = 8;
-                //options.Password.RequireNonAlphanumeric = true;
-                //options.Password.RequireUppercase = true;
-                //options.User.RequireUniqueEmail = true;
+                //Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequiredUniqueChars = 1;
 
+                //User settings
+                options.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultUI()
             .AddDefaultTokenProviders();
+
 
             builder.Services.AddControllersWithViews();
 
