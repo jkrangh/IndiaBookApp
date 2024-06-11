@@ -14,6 +14,7 @@ namespace IndiaBookApp.Test
         private ApplicationDbContext dbContext;
         private BookLoanRepository bookLoanRepository;
         private readonly BookRepositoryTest bookRepositoryTest;
+        private readonly UserRepositoryTest userRepositoryTest;
 
         public BookLoanRepositoryTest()
         {
@@ -21,6 +22,7 @@ namespace IndiaBookApp.Test
             dbContext.Database.EnsureCreated();
             bookLoanRepository = new BookLoanRepository(dbContext);
             bookRepositoryTest = new BookRepositoryTest();
+            userRepositoryTest = new UserRepositoryTest();
         }
         [Fact]
         public async Task CreateNewBookLoan()
@@ -40,18 +42,24 @@ namespace IndiaBookApp.Test
         {
             //Arrange
             var bookLoan = TestBookLoan();
-            var bookLoan2 = TestBookLoan();
-            var result = new BookLoan();
-            //Act
+            //var bookLoan2 = TestBookLoan();
+            //var result = new BookLoan();
             await bookLoanRepository.AddAsync(bookLoan);
-            await bookLoanRepository.AddAsync(bookLoan2);
+            //Act
+            //await bookLoanRepository.AddAsync(bookLoan2);
             bookLoan.LoanExpires = DateTime.Now.AddDays(30);
             await bookLoanRepository.UpdateAsync(bookLoan);
 
             var bookLoans = await bookLoanRepository.GetAllAsync();
-            result = bookLoans.Single(x => x.Id == bookLoan.Id);
+            //result = bookLoans.Single(x => x.Id == bookLoan.Id);
             //Assert
-            Assert.Equal(bookLoan.LoanExpires, result.LoanExpires);
+            using (var dbContextCheck = new ApplicationDbContext(dbContextOptions))
+            {
+                var bookLoanRepositoryCheck = new BookLoanRepository(dbContextCheck);
+                var updatedLoan = await bookLoanRepositoryCheck.GetByIdAsync(bookLoan.Id);
+                Assert.Equal(bookLoan.LoanExpires, updatedLoan.LoanExpires);
+            }
+            
         }
         [Fact]
         public async void DeleteBookLoan()
@@ -101,26 +109,10 @@ namespace IndiaBookApp.Test
             BookLoan bookLoan = new BookLoan()
             {
                 Book = bookRepositoryTest.TestBook(),
-                User = new User() { FirstName = "Lisa", LastName = "Svensson" }
+                User = userRepositoryTest.TestUser()
             };
             return bookLoan;
         }
-        public Book asdasTestBook()
-        {
-            Book book = new Book()
-            {
-                Author = "Jeff",
-                Country = "England",
-                ImageLink = "EmptyImage",
-                Language = "Enlgish",
-                Link = "EmptyWikiLink",
-                Pages = 404,
-                Title = "NoPageFound",
-                Year = 2024
-            };
-            return book;
-        }
-
         public void Dispose()
         {
             dbContext.Database.EnsureDeleted();
