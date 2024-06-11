@@ -14,6 +14,7 @@ namespace IndiaBookApp.Test
         private ApplicationDbContext dbContext;
         private BookLoanRepository bookLoanRepository;
         private readonly BookRepositoryTest bookRepositoryTest;
+        private readonly UserRepositoryTest userRepositoryTest;
 
         public BookLoanRepositoryTest()
         {
@@ -21,6 +22,7 @@ namespace IndiaBookApp.Test
             dbContext.Database.EnsureCreated();
             bookLoanRepository = new BookLoanRepository(dbContext);
             bookRepositoryTest = new BookRepositoryTest();
+            userRepositoryTest = new UserRepositoryTest();
         }
         [Fact]
         public async Task CreateNewBookLoan()
@@ -101,26 +103,10 @@ namespace IndiaBookApp.Test
             BookLoan bookLoan = new BookLoan()
             {
                 Book = bookRepositoryTest.TestBook(),
-                User = new User() { FirstName = "Lisa", LastName = "Svensson" }
+                User = userRepositoryTest.TestUser()
             };
             return bookLoan;
         }
-        public Book asdasTestBook()
-        {
-            Book book = new Book()
-            {
-                Author = "Jeff",
-                Country = "England",
-                ImageLink = "EmptyImage",
-                Language = "Enlgish",
-                Link = "EmptyWikiLink",
-                Pages = 404,
-                Title = "NoPageFound",
-                Year = 2024
-            };
-            return book;
-        }
-
         public void Dispose()
         {
             dbContext.Database.EnsureDeleted();

@@ -91,7 +91,7 @@ namespace IndiaBookApp.Test
             //Assert
         }
 
-        private User TestUser()
+        public User TestUser()
         {
             User user = new User()
             { 
