@@ -6,6 +6,6 @@
         public Book Book { get; set; }
         public User User { get; set; }
         public DateTime LoanDate { get; set; } = DateTime.Now;
-        public DateTime LoanExpires { get; set; }
+        public DateTime LoanExpires { get; set; } = DateTime.Now.AddDays(14);
     }
 }
