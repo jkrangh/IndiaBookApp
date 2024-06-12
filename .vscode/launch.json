@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C#: IndiaBookApp [https]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/IndiaBookApp/IndiaBookApp.csproj",
+            "launchConfigurationId": "TargetFramework=;https"
+        }
+    ]
+}
